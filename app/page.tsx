@@ -1,10 +1,12 @@
 'use client'
 
-import { supabase } from '@/app/lib/supabaseClient'
+import { getSupabaseClient } from './lib/supabaseClient'
 
 export default function Home() {
 
   const crearPaciente = async () => {
+    const supabase = getSupabaseClient()
+
     const { data, error } = await supabase
       .from('pacientes')
       .insert([
