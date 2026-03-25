@@ -1,21 +1,17 @@
 @import "tailwindcss";
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 @theme {
   --color-primary: #1e40af;
   --color-primary-dark: #1e3a8a;
-  --color-secondary: #e11d48; /* Un rojo más vibrante para el botón */
+  --color-secondary: #e11d48;
   --color-surface: #ffffff;
   --color-border: #e5e7eb;
 }
 
 :root {
-  /* Fondo con patrón de ECG sutil */
   --background: #f8fafc;
   --foreground: #0f172a;
-  --ecg-color: rgba(220, 38, 38, 0.05); /* Rojo muy tenue para la cuadrícula */
+  --ecg-color: rgba(220, 38, 38, 0.05);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -24,21 +20,20 @@
     --foreground: #f8fafc;
     --color-surface: #0f172a;
     --color-border: #1e293b;
-    --ecg-color: rgba(220, 38, 38, 0.1); /* Un poco más visible en oscuro */
+    --ecg-color: rgba(220, 38, 38, 0.1);
   }
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
-  /* ESTO CREA EL EFECTO DE PAPEL MILIMETRADO DE ECG */
   background-image: 
     linear-gradient(var(--ecg-color) 1px, transparent 1px),
     linear-gradient(90deg, var(--ecg-color) 1px, transparent 1px);
-  background-size: 20px 20px; /* Tamaño de los cuadros grandes */
+  background-size: 20px 20px;
+  padding-top: 80px;
 }
 
-/* Toque final: Cuadros pequeños dentro del ECG */
 body::before {
   content: "";
   position: fixed;
@@ -46,12 +41,11 @@ body::before {
   background-image: 
     linear-gradient(var(--ecg-color) 0.5px, transparent 0.5px),
     linear-gradient(90deg, var(--ecg-color) 0.5px, transparent 0.5px);
-  background-size: 4px 4px; /* Tamaño de los cuadros pequeños */
+  background-size: 4px 4px;
   pointer-events: none;
   z-index: -1;
   opacity: 0.5;
 }
-/* === COPIAR DESDE AQUÍ HASTA EL FINAL DE GLOBALS.CSS === */
 
 @keyframes ecg-scroll-realistic {
   0% { transform: translateX(0); }
@@ -83,16 +77,15 @@ body::before {
 .ecg-svg-realistic {
   width: 50%;
   height: 100%;
-  fill: none !important; /* CRITICO: Quita los triángulos negros */
+  fill: none !important;
 }
 
 .ecg-svg-realistic path {
-  stroke: #e11d48; /* El rojo secondary de tu tema */
+  stroke: #e11d48;
   stroke-width: 3;
   stroke-linecap: round;
   stroke-linejoin: round;
   fill: none;
-  /* Brillo de monitor médico */
   filter: drop-shadow(0 0 8px rgba(225, 29, 72, 0.8));
 }
 
@@ -108,7 +101,42 @@ body::before {
   text-shadow: 0 0 5px rgba(225, 29, 72, 0.5);
 }
 
-/* Ajuste para que el contenido empiece debajo del monitor */
-body {
-  padding-top: 80px;
+/* ==========================================
+   CONFIGURACIÓN DE IMPRESIÓN
+   ========================================== */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .print-only, .print-only * {
+    visibility: visible;
+  }
+
+  .print-only {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    display: block !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+    padding-top: 0 !important;
+  }
+
+  .no-print, header, nav, button, input, .ecg-container, aside {
+    display: none !important;
+  }
+
+  .page-break {
+    page-break-inside: avoid;
+    margin-bottom: 2rem;
+  }
+}
+
+.print-only {
+  display: none;
 }
